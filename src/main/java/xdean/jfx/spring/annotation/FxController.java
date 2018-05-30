@@ -12,4 +12,6 @@ import java.lang.annotation.Target;
 @Target(TYPE)
 public @interface FxController {
   String fxml();
+
+  boolean declaredInFxml() default true;
 }

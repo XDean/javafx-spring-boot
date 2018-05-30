@@ -13,6 +13,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Retention(RUNTIME)
 @Target(TYPE)
 @SpringBootApplication
-public @interface FxApplication {
+public @interface SpringFxApplication {
   
 }
