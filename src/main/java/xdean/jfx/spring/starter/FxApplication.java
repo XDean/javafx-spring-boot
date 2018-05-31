@@ -1,32 +1,65 @@
 package xdean.jfx.spring.starter;
 
+import java.util.concurrent.CountDownLatch;
+
+import org.springframework.util.Assert;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class FxApplication {
+public abstract class FxApplication {
 
-  private static InnerApplication instance;
+  private static FxApplication application;
+  private static InnerApplication innerApp;
 
-  public void launch(String[] args) {
-    Application.launch(InnerApplication.class, args);
+  private static final CountDownLatch STARTED = new CountDownLatch(1);
+  private Stage primaryStage;
+
+  public final void launch(String[] args) throws InterruptedException {
+    Assert.state(application == null, "Application launch must not be called more than once");
+    application = this;
+    new Thread(() -> Application.launch(InnerApplication.class, args), "Fx Starter Thread").start();
+    STARTED.await();
   }
-  
-  
 
-  public static class InnerApplication extends Application {
-    
-    private Stage stage;
-    
+  protected void init() throws Exception {
+  }
+
+  protected abstract void start(Stage primaryStage) throws Exception;
+
+  protected void stop() throws Exception {
+  }
+
+  public Stage getPrimaryStage() {
+    return primaryStage;
+  }
+
+  public static final class InnerApplication extends Application {
+
+    private final FxApplication app;
+
     public InnerApplication() {
-      if (instance != null) {
-        throw new IllegalStateException("Application launch must not be called more than once");
-      }
-      instance = this;
+      Assert.state(innerApp == null, "Application launch must not be called more than once.");
+      Assert.state(application != null, "Application must launch by FxApplication.");
+      innerApp = this;
+      this.app = application;
+    }
+
+    @Override
+    public void init() throws Exception {
+      app.init();
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-      this.stage = primaryStage;
+      app.primaryStage = primaryStage;
+      app.start(primaryStage);
+      STARTED.countDown();
+    }
+
+    @Override
+    public void stop() throws Exception {
+      app.stop();
     }
   }
 }
