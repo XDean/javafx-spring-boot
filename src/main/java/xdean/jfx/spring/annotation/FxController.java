@@ -7,6 +7,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Retention(RUNTIME)
 @Target(TYPE)
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public @interface FxController {
   @AliasFor("fxml")
   String value() default "";

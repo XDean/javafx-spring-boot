@@ -9,7 +9,9 @@ import xdean.jfx.spring.config.FxSchedulerConfiguration;
 @Import({
     FxContext.class,
     FxSchedulerConfiguration.class,
-    FxControllerProcessor.class
+    FxControllerProcessor.class,
+    FxPostContext.class
 })
 public class FxApplicationStarter {
+
 }
