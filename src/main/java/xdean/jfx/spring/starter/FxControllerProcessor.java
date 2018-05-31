@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 
 import javafx.fxml.FXMLLoader;
 import xdean.jfx.spring.annotation.FxController;
+import xdean.jfx.spring.annotation.FxReady;
 
 @Component
+@FxReady
 public class FxControllerProcessor implements BeanPostProcessor {
   @Override
   public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -21,15 +23,11 @@ public class FxControllerProcessor implements BeanPostProcessor {
       return bean;
     }
     FXMLLoader fxmlLoader = new FXMLLoader(clz.getResource(fxController.fxml()));
-    if (!fxController.declaredInFxml()) {
-      fxmlLoader.setController(bean);
-    }
     try {
       fxmlLoader.load();
     } catch (IOException e) {
       throw new BeanCreationException("Fail to load fxml: " + fxmlLoader.getLocation(), e);
     }
-
     return fxmlLoader.getController();
   }
 }

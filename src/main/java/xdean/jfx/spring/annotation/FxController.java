@@ -7,11 +7,17 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.springframework.core.annotation.AliasFor;
+import org.springframework.stereotype.Component;
+
 @Documented
 @Retention(RUNTIME)
 @Target(TYPE)
+@Component
 public @interface FxController {
-  String fxml();
+  @AliasFor("fxml")
+  String value() default "";
 
-  boolean declaredInFxml() default true;
+  @AliasFor("value")
+  String fxml() default "";
 }
