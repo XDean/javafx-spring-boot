@@ -1,17 +1,14 @@
 package xdean.jfx.spring.starter;
 
-import static xdean.jex.util.lang.ExceptionUtil.uncheck;
-
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
-import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
@@ -22,9 +19,10 @@ import xdean.jfx.spring.annotation.FxReady;
 
 @Component
 @FxReady
-public class FxControllerProcessor implements InstantiationAwareBeanPostProcessor {
-  private final Method getRoot = uncheck(() -> FxGetRoot.class.getMethod("getRoot"));
-  private final Map<Object, Object> controllerToRoot = new WeakHashMap<>();
+public class FxControllerProcessor implements InstantiationAwareBeanPostProcessor, BeanFactoryAware {
+  private static final Map<Object, Object> CONTROLLER_TO_ROOT = new WeakHashMap<>();
+
+  private BeanFactory beanFactory;
 
   @Override
   public boolean postProcessAfterInstantiation(Object controller, String beanName) throws BeansException {
@@ -34,31 +32,30 @@ public class FxControllerProcessor implements InstantiationAwareBeanPostProcesso
       return true;
     }
     FXMLLoader fxmlLoader = new FXMLLoader(beanClass.getResource(fxController.fxml()));
-    fxmlLoader.setControllerFactory(c -> controller);
+    fxmlLoader.setControllerFactory(c -> {
+      if (c == beanClass) {
+        return controller;
+      } else {
+        return beanFactory.getBean(c);
+      }
+    });
     try {
       fxmlLoader.load();
     } catch (IOException e) {
       throw new BeanCreationException("Fail to load fxml: " + fxmlLoader.getLocation(), e);
     }
     Object root = fxmlLoader.getRoot();
-    controllerToRoot.put(controller, root);
+    CONTROLLER_TO_ROOT.put(controller, root);
     return true;
   }
 
+  @SuppressWarnings("unchecked")
+  public static <T> T getRoot(FxGetRoot<T> controller) {
+    return (T) CONTROLLER_TO_ROOT.get(controller);
+  }
+
   @Override
-  public Object postProcessBeforeInitialization(Object controller, String beanName) throws BeansException {
-    Class<? extends Object> beanClass = controller.getClass();
-    if (controller instanceof FxGetRoot) {
-      Object root = controllerToRoot.remove(controller);
-      if (root != null) {
-        return Enhancer.create(beanClass, (MethodInterceptor) (obj, method, args, proxy) -> {
-          if (method.equals(getRoot)) {
-            return root;
-          }
-          return method.invoke(controller, args);
-        });
-      }
-    }
-    return controller;
+  public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    this.beanFactory = beanFactory;
   }
 }

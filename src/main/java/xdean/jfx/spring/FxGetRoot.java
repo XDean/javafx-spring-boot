@@ -1,7 +1,9 @@
 package xdean.jfx.spring;
 
+import xdean.jfx.spring.starter.FxControllerProcessor;
+
 public interface FxGetRoot<T> {
   default T getRoot() {
-    throw new UnsupportedOperationException();
+    return FxControllerProcessor.getRoot(this);
   }
 }
