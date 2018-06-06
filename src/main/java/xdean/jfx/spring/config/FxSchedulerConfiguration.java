@@ -15,9 +15,9 @@ import xdean.jfx.spring.annotation.FxReady;
 import xdean.jfx.spring.annotation.FxSync;
 
 @Configuration
-@EnableAsync
+@EnableAsync(proxyTargetClass = true)
 @FxReady
-public class FxSchedulerConfiguration implements Logable{
+public class FxSchedulerConfiguration implements Logable {
   @Bean
   @Qualifier(FxSync.SCHEDULER)
   public TaskExecutor sync() {
