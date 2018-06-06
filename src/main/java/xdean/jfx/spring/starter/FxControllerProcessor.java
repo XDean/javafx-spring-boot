@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import xdean.jex.log.Logable;
 import xdean.jfx.spring.FxGetRoot;
 import xdean.jfx.spring.FxInitializable;
 import xdean.jfx.spring.annotation.FxController;
@@ -21,7 +22,7 @@ import xdean.jfx.spring.annotation.FxReady;
 
 @Component
 @FxReady
-public class FxControllerProcessor implements InstantiationAwareBeanPostProcessor, BeanFactoryAware {
+public class FxControllerProcessor implements InstantiationAwareBeanPostProcessor, BeanFactoryAware, Logable {
   private static final Map<Object, Object> CONTROLLER_TO_ROOT = new WeakHashMap<>();
 
   private BeanFactory beanFactory;
@@ -33,6 +34,7 @@ public class FxControllerProcessor implements InstantiationAwareBeanPostProcesso
     if (fxController == null) {
       return true;
     }
+    debug("Load fxml, class:{}, source:{}.", beanClass, fxController.fxml());
     FXMLLoader fxmlLoader = new FXMLLoader(beanClass.getResource(fxController.fxml()));
     fxmlLoader.setControllerFactory(c -> {
       if (c == beanClass) {

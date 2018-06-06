@@ -30,10 +30,11 @@ public class FxContext implements Logable {
   }
 
   @Inject
-  public void launchFxApplication(@Named(FX_ARGS) @Autowired(required=false) String[] args) throws InterruptedException {
+  public void launchFxApplication(@Named(FX_ARGS) @Autowired(required = false) String[] args) throws InterruptedException {
     info("Start to init fx context.");
     new Thread(() -> Application.launch(ActualFxApplication.class, args), "Fx Start Thread").start();
     STARTED.await();
+    info("Fx Context (UI Thread) started");
   }
 
   @Bean(FX_PRIMARY_STAGE)
