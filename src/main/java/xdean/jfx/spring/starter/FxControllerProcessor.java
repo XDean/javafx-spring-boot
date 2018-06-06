@@ -50,14 +50,15 @@ public class FxControllerProcessor implements InstantiationAwareBeanPostProcesso
     Class<? extends Object> beanClass = controller.getClass();
     if (controller instanceof FxGetRoot) {
       Object root = controllerToRoot.remove(controller);
-      return Enhancer.create(beanClass, (MethodInterceptor) (obj, method, args, proxy) -> {
-        if (method.equals(getRoot)) {
-          return root;
-        }
-        return method.invoke(controller, args);
-      });
-    } else {
-      return controller;
+      if (root != null) {
+        return Enhancer.create(beanClass, (MethodInterceptor) (obj, method, args, proxy) -> {
+          if (method.equals(getRoot)) {
+            return root;
+          }
+          return method.invoke(controller, args);
+        });
+      }
     }
+    return controller;
   }
 }
