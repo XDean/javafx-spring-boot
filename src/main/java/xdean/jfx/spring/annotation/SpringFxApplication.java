@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
-import xdean.jfx.spring.starter.FxApplicationStarter;
+import xdean.jfx.spring.FxApplicationStarter;
 
 @Documented
 @Retention(RUNTIME)
