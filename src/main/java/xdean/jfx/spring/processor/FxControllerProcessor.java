@@ -1,4 +1,4 @@
-package xdean.jfx.spring.starter;
+package xdean.jfx.spring.processor;
 
 import java.io.IOException;
 import java.util.Map;
@@ -12,11 +12,9 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import xdean.jex.log.Logable;
 import xdean.jfx.spring.FxGetRoot;
-import xdean.jfx.spring.FxInitializable;
 import xdean.jfx.spring.annotation.FxController;
 import xdean.jfx.spring.annotation.FxReady;
 
@@ -51,14 +49,6 @@ public class FxControllerProcessor implements InstantiationAwareBeanPostProcesso
     Object root = fxmlLoader.getRoot();
     CONTROLLER_TO_ROOT.put(controller, root);
     return true;
-  }
-
-  @Override
-  public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-    if (bean instanceof FxInitializable) {
-      Platform.runLater(() -> ((FxInitializable) bean).initialize());
-    }
-    return bean;
   }
 
   @SuppressWarnings("unchecked")

@@ -1,6 +1,6 @@
 package xdean.jfx.spring;
 
-import xdean.jfx.spring.starter.FxControllerProcessor;
+import xdean.jfx.spring.processor.FxControllerProcessor;
 
 public interface FxGetRoot<T> {
   default T getRoot() {
