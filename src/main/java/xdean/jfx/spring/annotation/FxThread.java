@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.Async;
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-@Async(FxSync.SCHEDULER)
-public @interface FxSync {
-  String SCHEDULER = "scheduler.fx.sync";
+@Async(FxThread.SCHEDULER)
+public @interface FxThread {
+  String SCHEDULER = "scheduler.fx.scheduler";
 }
