@@ -9,10 +9,11 @@ import java.lang.annotation.Target;
 
 import org.springframework.scheduling.annotation.Async;
 
+import xdean.jfx.spring.starter.FxContext;
+
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-@Async(FxThread.SCHEDULER)
+@Async(FxContext.FX_SCHEDULER)
 public @interface FxThread {
-  String SCHEDULER = "fx.scheduler";
 }

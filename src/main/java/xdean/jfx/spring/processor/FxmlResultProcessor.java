@@ -12,10 +12,8 @@ import org.springframework.core.ResolvableType;
 import org.springframework.stereotype.Component;
 
 import xdean.jfx.spring.FxmlResult;
-import xdean.jfx.spring.annotation.FxReady;
 
 @Component
-@FxReady
 public class FxmlResultProcessor implements BeanFactoryPostProcessor, AutowireCandidateResolver {
 
   private DefaultListableBeanFactory beanFactory;
@@ -29,7 +27,6 @@ public class FxmlResultProcessor implements BeanFactoryPostProcessor, AutowireCa
           "CustomAutowireConfigurer needs to operate on a DefaultListableBeanFactory");
     }
     this.beanFactory = (DefaultListableBeanFactory) beanFactory;
-    this.controllerProcessor = beanFactory.getBean(FxControllerProcessor.class);
     if (!(this.beanFactory.getAutowireCandidateResolver() instanceof QualifierAnnotationAutowireCandidateResolver)) {
       this.beanFactory.setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
     }
@@ -41,6 +38,9 @@ public class FxmlResultProcessor implements BeanFactoryPostProcessor, AutowireCa
     ResolvableType type = descriptor.getResolvableType();
     if (!type.getRawClass().equals(FxmlResult.class)) {
       return null;
+    }
+    if (controllerProcessor == null) {
+      this.controllerProcessor = beanFactory.getBean(FxControllerProcessor.class);
     }
     ResolvableType controllerClass = type.getGeneric(0);
     ResolvableType rootClass = type.getGeneric(1);

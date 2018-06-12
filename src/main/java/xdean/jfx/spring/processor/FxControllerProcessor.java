@@ -1,18 +1,20 @@
 package xdean.jfx.spring.processor;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.task.TaskExecutor;
@@ -23,15 +25,14 @@ import xdean.jex.log.Logable;
 import xdean.jfx.spring.FxInitializable;
 import xdean.jfx.spring.annotation.FxController;
 import xdean.jfx.spring.annotation.FxReady;
-import xdean.jfx.spring.annotation.FxThread;
+import xdean.jfx.spring.starter.FxContext;
 
 @Component
 @FxReady
-public class FxControllerProcessor
-    implements InstantiationAwareBeanPostProcessor, BeanFactoryAware, Logable {
+public class FxControllerProcessor implements InstantiationAwareBeanPostProcessor, BeanFactoryAware, Logable {
 
-  @Inject
-  @Qualifier(FxThread.SCHEDULER)
+  @Autowired
+  @Named(FxContext.FX_SCHEDULER)
   private TaskExecutor scheduler;
 
   private BeanFactory beanFactory;
@@ -39,6 +40,12 @@ public class FxControllerProcessor
   private ThreadLocal<Map<Object, Object>> controllerToRoot = threadLocal(WeakHashMap::new);
 
   private ThreadLocal<Boolean> fxmling = threadLocal(() -> false);
+
+  private ThreadLocal<Deque<Object>> subControllers = threadLocal(ArrayDeque::new);
+
+  public FxControllerProcessor() {
+    System.err.println("init");
+  }
 
   @Override
   public boolean postProcessAfterInstantiation(Object controller, String beanName) throws BeansException {
@@ -59,7 +66,9 @@ public class FxControllerProcessor
       if (c == beanClass) {
         return controller;
       } else {
-        return beanFactory.getBean(c);
+        Object sub = beanFactory.getBean(c);
+        subControllers.get().push(sub);
+        return sub;
       }
     });
     try {
@@ -67,6 +76,8 @@ public class FxControllerProcessor
     } catch (IOException e) {
       throw new BeanCreationException("Fail to load fxml: " + fxmlLoader.getLocation(), e);
     } finally {
+      subControllers.get().forEach(this::invokeFxInit);
+      subControllers.get().clear();
       fxmling.set(false);
     }
     controllerToRoot.get().put(fxmlLoader.getController(), fxmlLoader.getRoot());
@@ -75,10 +86,14 @@ public class FxControllerProcessor
 
   @Override
   public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    invokeFxInit(bean);
+    return bean;
+  }
+
+  public void invokeFxInit(Object bean) {
     if (bean instanceof FxInitializable) {
       scheduler.execute(() -> ((FxInitializable) bean).initAfterFxSpringReady());
     }
-    return bean;
   }
 
   @Override
