@@ -1,7 +1,11 @@
 package xdean.jfx.spring.processor;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import org.springframework.beans.BeansException;
@@ -20,20 +24,21 @@ import xdean.jfx.spring.FxInitializable;
 import xdean.jfx.spring.annotation.FxController;
 import xdean.jfx.spring.annotation.FxReady;
 import xdean.jfx.spring.annotation.FxThread;
-import xdean.jfx.spring.annotation.ThreadScope;
 
-@ThreadScope
 @Component
 @FxReady
 public class FxControllerProcessor
-    implements  InstantiationAwareBeanPostProcessor, BeanFactoryAware, Logable {
+    implements InstantiationAwareBeanPostProcessor, BeanFactoryAware, Logable {
+
   @Inject
   @Qualifier(FxThread.SCHEDULER)
-  TaskExecutor scheduler;
+  private TaskExecutor scheduler;
 
   private BeanFactory beanFactory;
 
-  private boolean fxmling;
+  private ThreadLocal<Map<Object, Object>> controllerToRoot = threadLocal(WeakHashMap::new);
+
+  private ThreadLocal<Boolean> fxmling = threadLocal(() -> false);
 
   @Override
   public boolean postProcessAfterInstantiation(Object controller, String beanName) throws BeansException {
@@ -44,11 +49,11 @@ public class FxControllerProcessor
     if (fxController == null) {
       return true;
     }
-    if (fxmling) {
+    if (fxmling.get()) {
       return true;
     }
     debug("Load fxml, class:{}, source:{}.", beanClass, fxController.fxml());
-    fxmling = true;
+    fxmling.set(true);
     FXMLLoader fxmlLoader = new FXMLLoader(beanClass.getResource(fxController.fxml()));
     fxmlLoader.setControllerFactory(c -> {
       if (c == beanClass) {
@@ -61,7 +66,10 @@ public class FxControllerProcessor
       fxmlLoader.load();
     } catch (IOException e) {
       throw new BeanCreationException("Fail to load fxml: " + fxmlLoader.getLocation(), e);
+    } finally {
+      fxmling.set(false);
     }
+    controllerToRoot.get().put(fxmlLoader.getController(), fxmlLoader.getRoot());
     return true;
   }
 
@@ -76,5 +84,19 @@ public class FxControllerProcessor
   @Override
   public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
     this.beanFactory = beanFactory;
+  }
+
+  @Nullable
+  public Object getRoot(Object controller) {
+    return controllerToRoot.get().get(controller);
+  }
+
+  private static <T> ThreadLocal<T> threadLocal(Supplier<T> factory) {
+    return new ThreadLocal<T>() {
+      @Override
+      protected T initialValue() {
+        return factory.get();
+      }
+    };
   }
 }

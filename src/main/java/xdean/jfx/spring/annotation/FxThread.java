@@ -14,5 +14,5 @@ import org.springframework.scheduling.annotation.Async;
 @Target(METHOD)
 @Async(FxThread.SCHEDULER)
 public @interface FxThread {
-  String SCHEDULER = "scheduler.fx.scheduler";
+  String SCHEDULER = "fx.scheduler";
 }
