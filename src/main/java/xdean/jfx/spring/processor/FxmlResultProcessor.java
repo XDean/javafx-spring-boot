@@ -2,12 +2,13 @@ package xdean.jfx.spring.processor;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.annotation.QualifierAnnotationAutowireCandidateResolver;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.support.AutowireCandidateResolver;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.support.SimpleAutowireCandidateResolver;
 import org.springframework.core.ResolvableType;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,8 @@ public class FxmlResultProcessor implements BeanFactoryPostProcessor, AutowireCa
 
   private FxControllerProcessor controllerProcessor;
 
+  private AutowireCandidateResolver delegate;
+
   @Override
   public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
     if (!(beanFactory instanceof DefaultListableBeanFactory)) {
@@ -27,9 +30,8 @@ public class FxmlResultProcessor implements BeanFactoryPostProcessor, AutowireCa
           "CustomAutowireConfigurer needs to operate on a DefaultListableBeanFactory");
     }
     this.beanFactory = (DefaultListableBeanFactory) beanFactory;
-    if (!(this.beanFactory.getAutowireCandidateResolver() instanceof QualifierAnnotationAutowireCandidateResolver)) {
-      this.beanFactory.setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
-    }
+    AutowireCandidateResolver oldResolver = this.beanFactory.getAutowireCandidateResolver();
+    this.delegate = oldResolver == null ? new SimpleAutowireCandidateResolver() : oldResolver;
     this.beanFactory.setAutowireCandidateResolver(this);
   }
 
@@ -37,7 +39,7 @@ public class FxmlResultProcessor implements BeanFactoryPostProcessor, AutowireCa
   public Object getSuggestedValue(DependencyDescriptor descriptor) {
     ResolvableType type = descriptor.getResolvableType();
     if (!type.getRawClass().equals(FxmlResult.class)) {
-      return null;
+      return delegate.getSuggestedValue(descriptor);
     }
     if (controllerProcessor == null) {
       this.controllerProcessor = beanFactory.getBean(FxControllerProcessor.class);
@@ -53,5 +55,20 @@ public class FxmlResultProcessor implements BeanFactoryPostProcessor, AutowireCa
     }
 
     return new FxmlResult<>(controller, root);
+  }
+
+  @Override
+  public boolean isAutowireCandidate(BeanDefinitionHolder bdHolder, DependencyDescriptor descriptor) {
+    return delegate.isAutowireCandidate(bdHolder, descriptor);
+  }
+
+  @Override
+  public boolean isRequired(DependencyDescriptor descriptor) {
+    return delegate.isRequired(descriptor);
+  }
+
+  @Override
+  public Object getLazyResolutionProxyIfNecessary(DependencyDescriptor descriptor, String beanName) {
+    return delegate.getLazyResolutionProxyIfNecessary(descriptor, beanName);
   }
 }
