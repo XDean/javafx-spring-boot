@@ -1,9 +1,11 @@
 package xdean.jfx.spring.starter;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import javafx.stage.Stage;
@@ -14,8 +16,8 @@ import xdean.jfx.spring.annotation.FxReady;
 @FxReady
 public class FxPostContext {
 
-  @Inject
-  List<FxContextPostProcessor> processors;
+  @Autowired(required = false)
+  List<FxContextPostProcessor> processors = Collections.emptyList();
 
   @Inject
   public void start(FxApplication app, Stage stage) throws Exception {
