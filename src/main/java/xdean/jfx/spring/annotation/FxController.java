@@ -8,6 +8,8 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.springframework.core.annotation.AliasFor;
+
 @Inherited
 @Documented
 @Retention(RUNTIME)
@@ -15,4 +17,7 @@ import java.lang.annotation.Target;
 @FxComponent
 public @interface FxController {
   String fxml();
+
+  @AliasFor(annotation = FxComponent.class)
+  String value() default "";
 }
