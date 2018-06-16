@@ -17,5 +17,4 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public @interface FxComponent {
-
 }

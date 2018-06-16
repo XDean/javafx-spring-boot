@@ -25,7 +25,7 @@ import xdean.jex.log.Logable;
 import xdean.jfx.spring.FxInitializable;
 import xdean.jfx.spring.annotation.FxController;
 import xdean.jfx.spring.annotation.FxReady;
-import xdean.jfx.spring.starter.FxContext;
+import xdean.jfx.spring.context.FxContext;
 
 @Component
 @FxReady

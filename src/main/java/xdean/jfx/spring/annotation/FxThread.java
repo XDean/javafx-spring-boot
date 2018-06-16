@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 import org.springframework.scheduling.annotation.Async;
 
-import xdean.jfx.spring.starter.FxContext;
+import xdean.jfx.spring.context.FxContext;
 
 @Documented
 @Retention(RUNTIME)

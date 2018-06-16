@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 import org.springframework.context.annotation.DependsOn;
 
-import xdean.jfx.spring.starter.FxContext;
+import xdean.jfx.spring.context.FxContext;
 
 @Documented
 @Retention(RUNTIME)
