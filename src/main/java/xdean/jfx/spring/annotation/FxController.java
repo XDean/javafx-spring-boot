@@ -8,6 +8,8 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.springframework.core.annotation.AliasFor;
+
 import xdean.jfx.spring.FxInitializable;
 
 /**
@@ -26,4 +28,7 @@ public @interface FxController {
    * The fxml resource path. The path rule is same as {@link Class#getResource(String)}.
    */
   String fxml();
+
+  @AliasFor(annotation = FxComponent.class, attribute = "value")
+  String name() default "";
 }

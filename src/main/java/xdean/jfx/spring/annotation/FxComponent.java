@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,4 +24,6 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public @interface FxComponent {
 
+  @AliasFor(annotation = Component.class)
+  String value() default "";
 }
