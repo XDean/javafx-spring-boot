@@ -1,0 +1,14 @@
+package xdean.jfx.spring.sample
+
+import java.lang.*
+import javafx.scene.control.Button
+import javafx.scene.layout.HBox
+
+component Sample controlledby xdean.jfx.spring.sample.SampleController {
+  HBox {
+    Button id button {
+      text : "sayHello",
+      onAction : controllermethod sayHello
+    }
+  }
+}
