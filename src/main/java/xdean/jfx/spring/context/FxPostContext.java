@@ -12,6 +12,11 @@ import javafx.stage.Stage;
 import xdean.jfx.spring.FxApplication;
 import xdean.jfx.spring.annotation.FxReady;
 
+/**
+ * This class is to start the {@link FxApplication} after javafx context ready.
+ * 
+ * @author Dean Xu (XDean@github.com)
+ */
 @Configuration
 @FxReady
 public class FxPostContext {
