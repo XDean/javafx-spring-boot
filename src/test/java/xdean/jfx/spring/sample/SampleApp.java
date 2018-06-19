@@ -24,9 +24,8 @@ public class SampleApp implements FxApplication {
   public void start(Stage stage) throws Exception {
     Scene scene = new Scene(controller.getRoot(), 400, 300);
 
-    stage.setTitle("My JavaFX Application");
+    stage.setTitle("Hello JavaFX-Spring-Boot");
     stage.setScene(scene);
     stage.show();
   }
-
 }
