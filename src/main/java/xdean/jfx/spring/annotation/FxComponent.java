@@ -11,6 +11,11 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+/**
+ * Indicate the class is a javafx component. JavaFx component default has prototype scope.
+ * 
+ * @author Dean Xu (XDean@github.com)
+ */
 @Documented
 @Retention(RUNTIME)
 @Target(TYPE)

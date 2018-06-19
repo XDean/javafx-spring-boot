@@ -8,11 +8,22 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import xdean.jfx.spring.FxInitializable;
+
+/**
+ * Indicate the class is javafx controller, which will be initialized by fxml loader.
+ * 
+ * @see FxInitializable
+ * @author Dean Xu (XDean@github.com)
+ */
 @Inherited
 @Documented
 @Retention(RUNTIME)
 @Target(TYPE)
 @FxComponent
 public @interface FxController {
+  /**
+   * The fxml resource path. The path rule is same as {@link Class#getResource(String)}.
+   */
   String fxml();
 }
