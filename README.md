@@ -59,9 +59,9 @@ public class SampleController {
 
 ```java
 @SpringFxApplication // indicate this is a spring-fx application
-public class SampleApp implements FxApplication {
+public class SampleApp implements FxApplication { // FxApplication play the entrance role like Application
   public static void main(String[] args) {
-    SpringApplication.run(SampleApp.class, args);
+    SpringApplication.run(SampleApp.class, args); // run as spring application
   }
 
   @Inject
@@ -77,8 +77,6 @@ public class SampleApp implements FxApplication {
 }
 ```
 
-
 ## Other Sample
 
 [JavaFX CSS Editor](https://github.com/XDean/CSS-Editor-FX), a complete javafx-spring-boot application.
-
