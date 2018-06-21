@@ -1,0 +1,81 @@
+package fxml
+
+import javafx.scene.control.Label
+import javafx.scene.layout.HBox
+import javafx.scene.layout.VBox
+import javafx.scene.image.ImageView
+import javafx.scene.control.Button
+import javafx.scene.control.ProgressBar
+import javafx.scene.layout.Pane
+import javafx.scene.image.Image
+
+component DefaultSplash {
+  VBox {
+    children : [
+      HBox {
+        children : [
+          ImageView id logoView {
+            styleClass : "splash-logo",
+            image : Image {
+              url : "@../image/javafx-logo.png"
+            },
+            fitWidth : 50,
+            fitHeight : 50
+          },
+          Label id titleLabel {
+            styleClass : [
+              "splash-title"
+            ],
+            preview text : "JavaFX"
+          },
+          Pane {
+            static hgrow : "ALWAYS"
+          },
+          Button id minimizeButton {
+            styleClass : "splash-minimize"
+          },
+          Button id closeButton {
+            styleClass : "splash-close"
+          }
+        ]
+      },
+      VBox {
+        call VBox#vgrow : "ALWAYS",
+        Label id nameLabel {
+          styleClass : "splash-name"
+        },
+        ProgressBar id progressBar {
+          styleClass : "splash-progress"
+        }
+      },
+      VBox {
+        children : [
+          HBox {
+            children : [
+              Label id majorTaskLabel {
+                styleClass : "splash-major-task",
+                preview text : "Major Task"
+              },
+              Label id majorProgressLabel {
+                styleClass : "splash-major-progress",
+                preview text : "(1 of 5)"
+              }
+            ]
+          },
+          HBox {
+            children : [
+              Label id minorTaskLabel {
+                styleClass : "splash-minor-task",
+                preview text : "Minor Task"
+              },
+              Label id minorProgressLabel {
+                styleClass : "splash-minor-progress",
+                preview text : "(2 of 2)"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
