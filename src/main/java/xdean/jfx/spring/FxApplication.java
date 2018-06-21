@@ -2,14 +2,12 @@ package xdean.jfx.spring;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import xdean.jfx.spring.annotation.FxThread;
 
 /**
  * Entrance of javafx spring-boot application.
  * 
  * @author Dean Xu (XDean@github.com)
  */
-@FxThread
 public interface FxApplication {
   /**
    * The main entry point for all JavaFX-spring-boot applications. The start method is called after
