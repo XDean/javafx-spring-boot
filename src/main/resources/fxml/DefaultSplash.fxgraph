@@ -9,10 +9,12 @@ import javafx.scene.control.ProgressBar
 import javafx.scene.layout.Pane
 import javafx.scene.image.Image
 
-component DefaultSplash {
+component DefaultSplash styledwith "../css/DefaultSplash.css" {
   VBox {
+    styleClass : "splash-root",
     children : [
       HBox {
+        styleClass : "splash-head",
         children : [
           ImageView id logoView {
             styleClass : "splash-logo",
@@ -40,15 +42,20 @@ component DefaultSplash {
         ]
       },
       VBox {
+        styleClass : "splash-content",
+        alignment : "CENTER",
         call VBox#vgrow : "ALWAYS",
         Label id nameLabel {
-          styleClass : "splash-name"
+          styleClass : "splash-name",
+          preview text : "JavaFX-Spring-Boot"
         },
         ProgressBar id progressBar {
-          styleClass : "splash-progress"
+          styleClass : "splash-progress-bar",
+          progress : 0.5
         }
       },
       VBox {
+        styleClass : "splash-foot",
         children : [
           HBox {
             children : [

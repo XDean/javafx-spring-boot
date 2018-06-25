@@ -12,11 +12,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?scenebuilder-stylesheet ../css/DefaultSplash.css?>
 
-<VBox xmlns:fx="http://javafx.com/fxml">
+<VBox xmlns:fx="http://javafx.com/fxml" styleClass="splash-root">
 
 	<children>
-		<HBox> 
+		<HBox styleClass="splash-head"> 
 			<children>
 				<ImageView fx:id="logoView" styleClass="splash-logo" fitWidth="50" fitHeight="50"> 
 					<image>
@@ -33,11 +34,11 @@
 				<Button fx:id="closeButton" styleClass="splash-close"/> 
 			</children>
 		</HBox>
-		<VBox VBox.vgrow="ALWAYS"> 
+		<VBox styleClass="splash-content" alignment="CENTER" VBox.vgrow="ALWAYS"> 
 			<Label fx:id="nameLabel" styleClass="splash-name"/> 
-			<ProgressBar fx:id="progressBar" styleClass="splash-progress"/> 
+			<ProgressBar fx:id="progressBar" styleClass="splash-progress-bar" progress="0.5"/> 
 		</VBox>
-		<VBox> 
+		<VBox styleClass="splash-foot"> 
 			<children>
 				<HBox> 
 					<children>
