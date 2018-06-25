@@ -1,0 +1,29 @@
+package xdean.jfx.spring.annotation;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
+import org.springframework.core.annotation.AliasFor;
+import org.springframework.stereotype.Component;
+
+/**
+ * Indicate the type is a javafx node, which is default prototype.
+ *
+ * @author Dean Xu (XDean@github.com)
+ */
+@Documented
+@Retention(RUNTIME)
+@Target(TYPE)
+@FxComponent
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
+public @interface FxNode {
+
+  @AliasFor(annotation = Component.class)
+  String value() default "";
+}
