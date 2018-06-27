@@ -8,6 +8,7 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.AliasFor;
 
 import xdean.jfx.spring.FxInitializable;
@@ -22,6 +23,7 @@ import xdean.jfx.spring.FxInitializable;
 @Documented
 @Retention(RUNTIME)
 @Target(TYPE)
+@Lazy
 @FxComponent
 public @interface FxController {
   /**
