@@ -44,16 +44,15 @@ public class FxControllerProcessor implements InstantiationAwareBeanPostProcesso
   private ThreadLocal<Deque<Object>> subControllers = threadLocal(ArrayDeque::new);
 
   @Override
-  public boolean postProcessAfterInstantiation(Object controller, String beanName) throws BeansException {
-    // If fxmling, it means this controller is a sub-controller, it should be inject by
-    // parent-fxml-loader.
+  public Object postProcessBeforeInitialization(Object controller, String beanName) throws BeansException {
+    // If fxmling, it means this controller is a sub-controller, it should be
+    // inject by parent-fxml-loader.
     Class<? extends Object> beanClass = controller.getClass();
     FxController fxController = AnnotationUtils.getAnnotation(beanClass, FxController.class);
     if (fxController == null) {
-      return true;
-    }
-    if (fxmling.get()) {
-      return true;
+      return controller;
+    } else if (fxmling.get()) {
+      return controller;
     }
     debug("Load fxml, class:{}, source:{}.", beanClass, fxController.fxml());
     fxmling.set(true);
@@ -77,7 +76,7 @@ public class FxControllerProcessor implements InstantiationAwareBeanPostProcesso
     subControllers.get().forEach(this::invokeFxInit);
     subControllers.get().clear();
     controllerToRoot.get().put(fxmlLoader.getController(), fxmlLoader.getRoot());
-    return true;
+    return controller;
   }
 
   @Override
