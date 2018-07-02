@@ -1,11 +1,10 @@
 package xdean.jfx.spring.context;
 
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
-import javax.inject.Named;
-
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -14,13 +13,16 @@ import org.springframework.stereotype.Component;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import xdean.jex.log.Log;
+import xdean.jex.log.LogFactory;
 import xdean.jex.log.Logable;
 import xdean.jfx.spring.annotation.BeanName;
 import xdean.jfx.spring.processor.FxScheduler;
 
 /**
- * JavaFX Context. This component will start the javafx platform and provide the primary stage.
- * 
+ * JavaFX Context. This component will start the javafx platform and provide the
+ * primary stage.
+ *
  * @author Dean Xu (XDean@github.com)
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -35,7 +37,6 @@ public class FxContext implements Logable, InitializingBean {
   /**
    * JavaFX argument. JavaFX application will starts with the args if exists.
    */
-  @BeanName(String[].class)
   public static final String FX_ARGS = "fx.args";
 
   /**
@@ -50,30 +51,38 @@ public class FxContext implements Logable, InitializingBean {
   @BeanName(TaskExecutor.class)
   public static final String FX_SCHEDULER = "fx.scheduler";
 
+  private static final Log LOG = LogFactory.from(FxContext.class);
   private static final CountDownLatch STARTED = new CountDownLatch(1);
   private static Stage primaryStage;
 
-  @Autowired(required = false)
-  @Named(FX_ARGS)
+  @Value("#{'${" + FX_ARGS + ":}'.split(' ')}")
   private String[] args;
 
   @Override
   public void afterPropertiesSet() throws Exception {
-    info("Start to init fx context with args: " + args);
+    start(args);
+  }
+
+  public static void start(String[] args) throws InterruptedException {
+    if (STARTED.getCount() == 0) {
+      LOG.debug("Fx Context has been stated.");
+      return;
+    }
+    LOG.info("Start to init fx context with args: " + Arrays.toString(args));
     new Thread(() -> Application.launch(ActualFxApplication.class, args), "Fx Start Thread").start();
     STARTED.await();
-    info("Fx Context (UI Thread) started");
+    LOG.info("Fx Context (UI Thread) started");
   }
 
   @Bean(FX_PRIMARY_STAGE)
   public Stage primaryStage() {
-    debug("Init fx primary stage");
+    debug("Init fx primary stage bean");
     return primaryStage;
   }
 
   @Bean(FX_SCHEDULER)
   public TaskExecutor scheduler() {
-    debug("Init fx scheduler");
+    debug("Init fx scheduler bean");
     return new FxScheduler();
   }
 
