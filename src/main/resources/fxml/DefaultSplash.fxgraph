@@ -56,6 +56,7 @@ component DefaultSplash {
             styleClass : "splash-foot",
             children : [
               HBox {
+                spacing : 5,
                 children : [
                   Label id majorTaskLabel {
                     styleClass : "splash-major-task",
@@ -68,6 +69,7 @@ component DefaultSplash {
                 ]
               },
               HBox {
+                spacing : 5,
                 children : [
                   Label id minorTaskLabel {
                     styleClass : "splash-minor-task",

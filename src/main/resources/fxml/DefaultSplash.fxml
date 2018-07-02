@@ -46,13 +46,13 @@
 				</ImageView>
 				<VBox styleClass="splash-foot" AnchorPane.bottomAnchor="0"> 
 					<children>
-						<HBox> 
+						<HBox spacing="5"> 
 							<children>
 								<Label fx:id="majorTaskLabel" styleClass="splash-major-task"/> 
 								<Label fx:id="majorProgressLabel" styleClass="splash-major-progress"/> 
 							</children>
 						</HBox>
-						<HBox> 
+						<HBox spacing="5"> 
 							<children>
 								<Label fx:id="minorTaskLabel" styleClass="splash-minor-task"/> 
 								<Label fx:id="minorProgressLabel" styleClass="splash-minor-progress"/> 
