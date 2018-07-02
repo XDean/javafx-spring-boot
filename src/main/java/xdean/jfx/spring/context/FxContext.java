@@ -63,15 +63,16 @@ public class FxContext implements Logable, InitializingBean {
     start(args);
   }
 
-  public static void start(String[] args) throws InterruptedException {
+  public static Stage start(String[] args) throws InterruptedException {
     if (STARTED.getCount() == 0) {
       LOG.debug("Fx Context has been stated.");
-      return;
+      return primaryStage;
     }
     LOG.info("Start to init fx context with args: " + Arrays.toString(args));
     new Thread(() -> Application.launch(ActualFxApplication.class, args), "Fx Start Thread").start();
     STARTED.await();
     LOG.info("Fx Context (UI Thread) started");
+    return primaryStage;
   }
 
   @Bean(FX_PRIMARY_STAGE)

@@ -10,11 +10,14 @@ import javafx.stage.Stage;
 import xdean.jfx.spring.FxApplication;
 import xdean.jfx.spring.FxmlResult;
 import xdean.jfx.spring.annotation.SpringFxApplication;
+import xdean.jfx.spring.splash.FxSplash;
 
 @SpringFxApplication
 public class SampleApp implements FxApplication {
   public static void main(String[] args) {
-    SpringApplication.run(SampleApp.class, args);
+    SpringApplication app = new SpringApplication(SampleApp.class);
+    app.addListeners(new FxSplash());
+    app.run(args);
   }
 
   @Inject
