@@ -1,7 +1,7 @@
 package xdean.jfx.spring.splash;
 
 public interface PreloadReporter {
-
+  
   SubReporter load(String title);
 
   void done();

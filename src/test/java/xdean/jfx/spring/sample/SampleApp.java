@@ -9,9 +9,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import xdean.jfx.spring.FxApplication;
 import xdean.jfx.spring.FxmlResult;
+import xdean.jfx.spring.annotation.Splash;
 import xdean.jfx.spring.annotation.SpringFxApplication;
 import xdean.jfx.spring.splash.FxSplash;
 
+@Splash
 @SpringFxApplication
 public class SampleApp implements FxApplication {
   public static void main(String[] args) {

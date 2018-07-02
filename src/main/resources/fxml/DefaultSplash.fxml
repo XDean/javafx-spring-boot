@@ -4,55 +4,64 @@
 -->
 
 <?import java.lang.*?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Border?>
+<?import javafx.scene.layout.BorderStroke?>
+<?import javafx.scene.layout.BorderStrokeStyle?>
+<?import javafx.scene.layout.BorderWidths?>
+<?import javafx.scene.layout.CornerRadii?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?scenebuilder-stylesheet ../css/DefaultSplash.css?>
+<?import javafx.scene.paint.Color?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" styleClass="splash-root">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:id="root">
 
+	<border>
+		<Border> 
+			<strokes>
+				<BorderStroke> 
+					<stroke><Color fx:constant="BLACK" /></stroke>
+					<style><BorderStrokeStyle fx:constant="SOLID" /></style>
+					<radii>
+						<CornerRadii radius="3"/> 
+					</radii>
+					<widths>
+						<BorderWidths width="1.5"/> 
+					</widths>
+				</BorderStroke>
+			</strokes>
+		</Border>
+	</border>
 	<children>
-		<HBox styleClass="splash-head"> 
+		<AnchorPane fx:id="container" styleClass="splash-root" AnchorPane.leftAnchor="3" AnchorPane.rightAnchor="3" AnchorPane.bottomAnchor="1" AnchorPane.topAnchor="2"> 
 			<children>
-				<ImageView fx:id="logoView" styleClass="splash-logo" fitWidth="50" fitHeight="50"> 
+				<ImageView styleClass="splash-image" fitWidth="${container.width}" fitHeight="${container.height}" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="20" AnchorPane.topAnchor="0"> 
 					<image>
-						<Image url="@../image/javafx-logo.png"/> 
+						<Image url="@../image/javafx-splash.png"/> 
 					</image>
 				</ImageView>
-				<Label fx:id="titleLabel"> 
-					<styleClass>
-						<String fx:value="splash-title" />
-					</styleClass>
-				</Label>
-				<Pane HBox.hgrow="ALWAYS"/> 
-				<Button fx:id="minimizeButton" styleClass="splash-minimize"/> 
-				<Button fx:id="closeButton" styleClass="splash-close"/> 
-			</children>
-		</HBox>
-		<VBox styleClass="splash-content" alignment="CENTER" VBox.vgrow="ALWAYS"> 
-			<Label fx:id="nameLabel" styleClass="splash-name"/> 
-			<ProgressBar fx:id="progressBar" styleClass="splash-progress-bar" progress="0.5"/> 
-		</VBox>
-		<VBox styleClass="splash-foot"> 
-			<children>
-				<HBox> 
+				<VBox styleClass="splash-foot" AnchorPane.bottomAnchor="0"> 
 					<children>
-						<Label fx:id="majorTaskLabel" styleClass="splash-major-task"/> 
-						<Label fx:id="majorProgressLabel" styleClass="splash-major-progress"/> 
+						<HBox> 
+							<children>
+								<Label fx:id="majorTaskLabel" styleClass="splash-major-task"/> 
+								<Label fx:id="majorProgressLabel" styleClass="splash-major-progress"/> 
+							</children>
+						</HBox>
+						<HBox> 
+							<children>
+								<Label fx:id="minorTaskLabel" styleClass="splash-minor-task"/> 
+								<Label fx:id="minorProgressLabel" styleClass="splash-minor-progress"/> 
+							</children>
+						</HBox>
+						<ProgressBar fx:id="progressBar" styleClass="splash-progress-bar" prefHeight="20" prefWidth="${container.width}"/> 
 					</children>
-				</HBox>
-				<HBox> 
-					<children>
-						<Label fx:id="minorTaskLabel" styleClass="splash-minor-task"/> 
-						<Label fx:id="minorProgressLabel" styleClass="splash-minor-progress"/> 
-					</children>
-				</HBox>
+				</VBox>
 			</children>
-		</VBox>
+		</AnchorPane>
 	</children>
-</VBox>
+</AnchorPane>

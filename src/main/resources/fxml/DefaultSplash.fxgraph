@@ -8,76 +8,81 @@ import javafx.scene.control.Button
 import javafx.scene.control.ProgressBar
 import javafx.scene.layout.Pane
 import javafx.scene.image.Image
+import javafx.scene.layout.Border
+import javafx.scene.layout.BorderStroke
+import javafx.scene.layout.Background
+import javafx.scene.layout.AnchorPane
+import javafx.scene.paint.Color
+import javafx.scene.layout.BorderStrokeStyle
+import javafx.scene.layout.CornerRadii
+import javafx.scene.layout.BorderWidths
 
-component DefaultSplash styledwith "../css/DefaultSplash.css" {
-  VBox {
-    styleClass : "splash-root",
-    children : [
-      HBox {
-        styleClass : "splash-head",
-        children : [
-          ImageView id logoView {
-            styleClass : "splash-logo",
-            image : Image {
-              url : "@../image/javafx-logo.png"
-            },
-            fitWidth : 50,
-            fitHeight : 50
-          },
-          Label id titleLabel {
-            styleClass : [
-              "splash-title"
-            ],
-            preview text : "JavaFX"
-          },
-          Pane {
-            static hgrow : "ALWAYS"
-          },
-          Button id minimizeButton {
-            styleClass : "splash-minimize"
-          },
-          Button id closeButton {
-            styleClass : "splash-close"
-          }
-        ]
-      },
-      VBox {
-        styleClass : "splash-content",
-        alignment : "CENTER",
-        call VBox#vgrow : "ALWAYS",
-        Label id nameLabel {
-          styleClass : "splash-name",
-          preview text : "JavaFX-Spring-Boot"
+component DefaultSplash {
+  AnchorPane id root {
+    border : Border {
+      strokes : BorderStroke {
+        stroke : const Color#BLACK,
+        style : const BorderStrokeStyle#SOLID,
+        radii : CornerRadii {
+          radius : 3
         },
-        ProgressBar id progressBar {
-          styleClass : "splash-progress-bar",
-          progress : 0.5
+        widths : BorderWidths {
+          width : 1.5
         }
-      },
-      VBox {
-        styleClass : "splash-foot",
+      }
+    },
+    children : [
+      AnchorPane id container {
+        styleClass : "splash-root",
+        static leftAnchor : 3,
+        static rightAnchor : 3,
+        static bottomAnchor : 1,
+        static topAnchor : 2,
         children : [
-          HBox {
-            children : [
-              Label id majorTaskLabel {
-                styleClass : "splash-major-task",
-                preview text : "Major Task"
-              },
-              Label id majorProgressLabel {
-                styleClass : "splash-major-progress",
-                preview text : "(1 of 5)"
-              }
-            ]
+          ImageView {
+            styleClass : "splash-image",
+            image : Image {
+              url : "@../image/javafx-splash.png"
+            },
+            fitWidth : bind container#width,
+            fitHeight : bind container#height,
+            static leftAnchor : 0,
+            static rightAnchor : 0,
+            static bottomAnchor : 20,
+            static topAnchor : 0
           },
-          HBox {
+          VBox {
+            static bottomAnchor : 0,
+            styleClass : "splash-foot",
             children : [
-              Label id minorTaskLabel {
-                styleClass : "splash-minor-task",
-                preview text : "Minor Task"
+              HBox {
+                children : [
+                  Label id majorTaskLabel {
+                    styleClass : "splash-major-task",
+                    preview text : "Major Task"
+                  },
+                  Label id majorProgressLabel {
+                    styleClass : "splash-major-progress",
+                    preview text : "(1 of 5)"
+                  }
+                ]
               },
-              Label id minorProgressLabel {
-                styleClass : "splash-minor-progress",
-                preview text : "(2 of 2)"
+              HBox {
+                children : [
+                  Label id minorTaskLabel {
+                    styleClass : "splash-minor-task",
+                    preview text : "Minor Task"
+                  },
+                  Label id minorProgressLabel {
+                    styleClass : "splash-minor-progress",
+                    preview text : "(2 of 2)"
+                  }
+                ]
+              },
+              ProgressBar id progressBar {
+                styleClass : "splash-progress-bar",
+                prefHeight : 20,
+                prefWidth : bind container#width
               }
             ]
           }
