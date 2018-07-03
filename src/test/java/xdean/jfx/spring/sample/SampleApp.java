@@ -31,7 +31,6 @@ public class SampleApp implements FxApplication {
     Scene scene = new Scene(controller.getRoot(), 400, 300);
     stage.setTitle("Hello JavaFX-Spring-Boot");
     stage.setScene(scene);
-    stage.show();
   }
 
   @PostConstruct

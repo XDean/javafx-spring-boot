@@ -1,7 +1,5 @@
 package xdean.jfx.spring.splash;
 
-import static xdean.jfxex.bean.ListenerUtil.on;
-
 import java.io.IOException;
 
 import org.springframework.util.Assert;
@@ -51,7 +49,6 @@ public class DefaultSplash implements SplashService, PreloadReporter, Logable {
     }
 
     splashStage.setScene(new Scene(root));
-
     splashStage.setAlwaysOnTop(true);
     splashStage.setWidth(700);
     splashStage.setHeight(400);
@@ -59,7 +56,7 @@ public class DefaultSplash implements SplashService, PreloadReporter, Logable {
 
     DragSupport.bind(splashStage);
 
-    primaryStage.showingProperty().addListener(on(true, () -> done()));
+    primaryStage.setOnShowing(e -> hideSplash(false));
   }
 
   @Override
@@ -82,6 +79,8 @@ public class DefaultSplash implements SplashService, PreloadReporter, Logable {
           minorTaskLabel.setText(subTitle);
           if (count >= task) {
             minorProgressLabel.setText(String.format("(%d/%d)", task, count));
+          } else {
+            minorProgressLabel.setText("");
           }
         });
       }
@@ -90,16 +89,22 @@ public class DefaultSplash implements SplashService, PreloadReporter, Logable {
 
   @Override
   public void done() {
+    hideSplash(true);
+  }
+
+  public void hideSplash(boolean showPrimary) {
     if (!done) {
       run(() -> {
         if (!done) {
           done = true;
           debug("Close splash stage");
           Timeline timeline = new Timeline();
-          timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1200),
+          timeline.getKeyFrames().add(new KeyFrame(Duration.millis(500),
               new KeyValue(splashStage.getScene().getRoot().opacityProperty(), 0.3)));
           timeline.setOnFinished(e -> {
-            primaryStage.show();
+            if (showPrimary) {
+              primaryStage.show();
+            }
             splashStage.close();
           });
           timeline.play();
