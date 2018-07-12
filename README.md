@@ -1,6 +1,7 @@
 # JavaFX Spring Boot
 [![Build Status](https://travis-ci.org/XDean/javafx-spring-boot.svg?branch=master)](https://travis-ci.org/XDean/javafx-spring-boot)
 [![codecov.io](http://codecov.io/github/XDean/javafx-spring-boot/coverage.svg?branch=master)](https://codecov.io/gh/XDean/javafx-spring-boot/branch/master)
+[![sonarqube](https://sonarcloud.io/api/project_badges/measure?project=com.github.XDean%3Ajavafx-spring-boot&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.github.XDean%3Ajavafx-spring-boot)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.XDean/javafx-spring-boot/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.XDean/javafx-spring-boot)
 
 Build your JavaFX Application in pure spring way!

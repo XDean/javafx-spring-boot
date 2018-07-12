@@ -49,9 +49,7 @@ public class FxControllerProcessor implements InstantiationAwareBeanPostProcesso
     // inject by parent-fxml-loader.
     Class<? extends Object> beanClass = controller.getClass();
     FxController fxController = AnnotationUtils.getAnnotation(beanClass, FxController.class);
-    if (fxController == null) {
-      return controller;
-    } else if (fxmling.get()) {
+    if (fxController == null || fxmling.get()) {
       return controller;
     }
     debug("Load fxml, class:{}, source:{}.", beanClass, fxController.fxml());
